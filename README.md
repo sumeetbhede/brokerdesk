@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BrokerDesk
 
-## Getting Started
+Mobile-first web app for independent real estate brokers: leads, listings, and tracked WhatsApp sharing.
+Next.js 16 (App Router) + Supabase (Postgres, Auth, Storage).
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Database**: in the Supabase dashboard open SQL Editor, paste `supabase/migrations/0001_init.sql`, run it once.
+2. **Keys**: copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project Settings → API).
+3. **Run**: `npm install`, then `npm run dev`, and open http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For quick testing, turn off "Confirm email" under Authentication → Sign In / Providers → Email, otherwise
+each signup has to click an email link first. For production, set Authentication → URL Configuration → Site URL
+to your deployed address.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What's in it
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Area | Path | Notes |
+|---|---|---|
+| Today | `/` | Follow-ups due, links clients opened, new leads |
+| Leads | `/leads` | Stages, notes, follow-ups, matching listings, send on WhatsApp |
+| Listings | `/listings` | Manual entry, photos, status, PDF brochure |
+| Import | `/listings/import` | Excel/CSV inventory sheet, columns matched by heading |
+| Public link | `/p/<token>` | What the client sees; each open is logged |
 
-## Learn More
+## Data model
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Every signup gets its own `organization`, and every row carries `org_id`. Row-level security limits each
+user to their own organization, so adding agents later needs an invite flow but no schema change.
+Anonymous visitors can't read any table; the public page goes through the `get_share()` function, which
+returns one listing for one token and leaves out `private_notes`.
