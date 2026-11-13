@@ -5,7 +5,7 @@ Next.js 16 (App Router) + Supabase (Postgres, Auth, Storage).
 
 ## Setup
 
-1. **Database**: in the Supabase dashboard open SQL Editor, paste `supabase/migrations/0001_init.sql`, run it once.
+1. **Database**: in the Supabase dashboard open SQL Editor, run each file in `supabase/migrations/` once, in order.
 2. **Keys**: copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project Settings → API).
 3. **Run**: `npm install`, then `npm run dev`, and open http://localhost:3000.
 
