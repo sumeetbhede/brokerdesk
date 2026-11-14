@@ -64,7 +64,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins), var(--font-noto-bengali), var(--font-noto-gujarati), var(--font-noto-gurmukhi),
+    var(--font-noto-kannada), var(--font-noto-malayalam), var(--font-noto-oriya), var(--font-noto-tamil), var(--font-noto-telugu),
+    "Noto Sans", system-ui, sans-serif;
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-subtle: var(--subtle);
@@ -87,21 +89,26 @@
   --color-info-ink: var(--info-ink);
 }
 
+/* Type scale: Poppins 400 and 500 only. Body 12px, names 14px, titles 22px, money 24-28px. */
 body {
   background: var(--bg);
   color: var(--ink);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 400;
 }
+b, strong, h1, h2, h3, th { font-weight: 500; }
 
 @layer components {
   .card { @apply rounded-2xl border border-line bg-card p-4; }
-  .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-on-brand active:bg-brand-dark disabled:opacity-50; }
-  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 text-sm font-semibold text-ink active:bg-subtle disabled:opacity-50; }
-  .btn-sm { @apply min-h-9 rounded-lg px-3 text-xs; }
+  .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-medium text-on-brand active:bg-brand-dark disabled:opacity-50; }
+  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 text-sm font-medium text-ink active:bg-subtle disabled:opacity-50; }
+  .btn-sm { @apply min-h-9 rounded-lg px-3 text-[13px]; }
   .input { @apply block min-h-11 w-full rounded-xl border border-line bg-card px-3 text-base text-ink placeholder:text-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25; }
-  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-muted; }
-  .chip { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold; }
-  .h1 { @apply text-2xl font-bold tracking-tight; }
-  .muted { @apply text-sm text-muted; }
+  .label { @apply mb-1 block text-[11px] font-normal uppercase tracking-wide text-muted; }
+  .chip { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-normal; }
+  .h1 { @apply text-[22px] font-medium leading-tight; }
+  .muted { @apply text-xs text-muted; }
   .tone-good { @apply bg-good-bg text-good-ink; }
   .tone-warn { @apply bg-warn-bg text-warn-ink; }
   .tone-bad { @apply bg-bad-bg text-bad-ink; }
@@ -109,7 +116,7 @@ body {
   .tone-neutral { @apply bg-subtle text-muted; }
 
   /* Lead status pill: fully rounded, small text, no border. */
-  .status-pill { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold leading-4; }
+  .status-pill { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-normal leading-4; }
   .status-hot { background: var(--hot-bg); color: var(--hot-ink); }
   .bar-hot { background: var(--hot-ink); }
   .status-warm { background: var(--warm-bg); color: var(--warm-ink); }

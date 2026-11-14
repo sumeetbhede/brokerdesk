@@ -116,30 +116,30 @@ export function ImportClient() {
   return (
     <>
       <div className="card space-y-3">
-        <input type="file" accept=".xlsx,.xls,.csv" onChange={onFile} aria-label="Inventory file" className="block w-full text-sm file:mr-3 file:min-h-11 file:rounded-xl file:border-0 file:bg-brand file:px-4 file:font-semibold file:text-on-brand" />
+        <input type="file" accept=".xlsx,.xls,.csv" onChange={onFile} aria-label="Inventory file" className="block w-full text-sm file:mr-3 file:min-h-11 file:rounded-xl file:border-0 file:bg-brand file:px-4 file:font-medium file:text-on-brand" />
         <p className="muted">
           Columns are matched by heading: Project, Builder, Locality, City, Type, BHK, Carpet Area, Price, Floor, Status, Unit No. Prices like
           &ldquo;85 L&rdquo;, &ldquo;1.2 Cr&rdquo; or 8500000 all work.{" "}
-          <a className="font-semibold text-accent" download="properties-template.csv" href={`data:text/csv;charset=utf-8,${encodeURIComponent(TEMPLATE)}`}>
+          <a className="font-medium text-accent" download="properties-template.csv" href={`data:text/csv;charset=utf-8,${encodeURIComponent(TEMPLATE)}`}>
             Download a template
           </a>
         </p>
       </div>
 
       {msg && (
-        <p role={msg.kind === "error" ? "alert" : "status"} className={`rounded-xl px-3 py-2 text-sm ${msg.kind === "error" ? "bg-bad-bg text-bad-ink" : "bg-good-bg text-good-ink"}`}>
-          {msg.text} {msg.kind === "ok" && <Link href="/properties" className="font-semibold underline">View properties</Link>}
+        <p role={msg.kind === "error" ? "alert" : "status"} className={`rounded-xl px-3 py-2 text-xs ${msg.kind === "error" ? "bg-bad-bg text-bad-ink" : "bg-good-bg text-good-ink"}`}>
+          {msg.text} {msg.kind === "ok" && <Link href="/properties" className="font-medium underline">View properties</Link>}
         </p>
       )}
 
       {rows.length > 0 && (
         <>
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-medium">
             {rows.length} rows ready{skipped > 0 && `, ${skipped} skipped (no title, project or BHK)`}. Showing the first {Math.min(rows.length, 20)}.
           </p>
           <div className="card overflow-x-auto !p-0">
-            <table className="w-full min-w-[480px] text-left text-sm">
-              <thead className="text-xs uppercase text-muted">
+            <table className="w-full min-w-[480px] text-left text-xs">
+              <thead className="text-[11px] uppercase text-muted">
                 <tr>
                   <th className="px-3 py-2">Title</th>
                   <th className="px-3 py-2">Price</th>

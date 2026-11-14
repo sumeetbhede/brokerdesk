@@ -76,8 +76,8 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold">{l.title}</p>
-                    <p className="font-bold text-accent">{formatINR(l.price) || "Price on request"}</p>
+                    <p className="truncate text-sm font-medium">{l.title}</p>
+                    <p className="text-sm font-medium text-accent">{formatINR(l.price) || "Price on request"}</p>
                     <p className="muted truncate">{listingSummary(l)}</p>
                     {l.status !== "available" && <StatusChip status={l.status} />}
                   </div>

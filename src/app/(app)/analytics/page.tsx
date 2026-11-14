@@ -68,23 +68,23 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
           </div>
 
           <section className="card space-y-3">
-            <h2 className="font-bold">Conversion funnel</h2>
+            <h2 className="text-sm font-medium">Conversion funnel</h2>
             <Bars rows={funnel} max={total} showShare />
             <p className="muted">{booked} of {total} leads booked. Cold and lost leads count only in the first bar.</p>
           </section>
 
           <section className="card space-y-3">
-            <h2 className="font-bold">Leads by status</h2>
+            <h2 className="text-sm font-medium">Leads by status</h2>
             <Bars rows={byStatus} max={total} />
           </section>
 
           <section className="card space-y-3">
-            <h2 className="font-bold">Active leads by source</h2>
+            <h2 className="text-sm font-medium">Active leads by source</h2>
             {activeBySource.length ? <Bars rows={activeBySource} /> : <p className="muted">No active leads in this period.</p>}
           </section>
 
           <section className="card space-y-3">
-            <h2 className="font-bold">Bookings by source</h2>
+            <h2 className="text-sm font-medium">Bookings by source</h2>
             {bookedBySource.length ? <Bars rows={bookedBySource} /> : <p className="muted">No bookings in this period.</p>}
           </section>
         </>
@@ -100,8 +100,8 @@ function daysAgo(days: number) {
 function Tile({ label, value, tone }: { label: string; value: string; tone?: string }) {
   return (
     <div className={`card !p-3 ${tone ? `${tone} border-transparent` : ""}`}>
-      <p className="text-2xl font-bold tabular-nums">{value}</p>
-      <p className={`text-xs ${tone ? "" : "text-muted"}`}>{label}</p>
+      <p className="text-2xl font-medium tabular-nums">{value}</p>
+      <p className={`text-[11px] ${tone ? "" : "text-muted"}`}>{label}</p>
     </div>
   );
 }
@@ -112,9 +112,9 @@ function Bars({ rows, max, showShare = false }: { rows: Row[]; max?: number; sho
     <ul className="space-y-2.5">
       {rows.map(([label, value, color]) => (
         <li key={label}>
-          <div className="mb-1 flex items-baseline justify-between text-sm">
+          <div className="mb-1 flex items-baseline justify-between text-xs">
             <span>{label}</span>
-            <span className="font-semibold tabular-nums">
+            <span className="font-medium tabular-nums">
               {value}
               {showShare && top > 0 && <span className="ml-1.5 font-normal text-muted">{Math.round((value / top) * 100)}%</span>}
             </span>

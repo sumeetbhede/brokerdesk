@@ -111,7 +111,7 @@ export function LeadImportClient({ existingPhones }: { existingPhones: string[] 
             role="tab"
             aria-selected={mode === m}
             onClick={() => { setMode(m); setMsg(null); }}
-            className={`min-h-10 rounded-lg text-sm font-semibold ${mode === m ? "bg-card text-ink shadow-sm" : "text-muted"}`}
+            className={`min-h-10 rounded-lg text-sm font-medium ${mode === m ? "bg-card text-ink shadow-sm" : "text-muted"}`}
           >
             {m === "paste" ? "Paste a list" : "Excel / CSV"}
           </button>
@@ -123,7 +123,7 @@ export function LeadImportClient({ existingPhones }: { existingPhones: string[] 
           <label className="label" htmlFor="paste">One lead per line</label>
           <textarea
             id="paste"
-            className="input py-2 font-mono text-sm"
+            className="input py-2 font-mono text-xs"
             rows={6}
             value={text}
             onChange={(e) => { setText(e.target.value); setMsg(null); }}
@@ -133,10 +133,10 @@ export function LeadImportClient({ existingPhones }: { existingPhones: string[] 
         </div>
       ) : (
         <div className="card space-y-3">
-          <input type="file" accept=".xlsx,.xls,.csv" onChange={onFile} aria-label="Leads file" className="block w-full text-sm file:mr-3 file:min-h-11 file:rounded-xl file:border-0 file:bg-brand file:px-4 file:font-semibold file:text-on-brand" />
+          <input type="file" accept=".xlsx,.xls,.csv" onChange={onFile} aria-label="Leads file" className="block w-full text-sm file:mr-3 file:min-h-11 file:rounded-xl file:border-0 file:bg-brand file:px-4 file:font-medium file:text-on-brand" />
           <p className="muted">
             Columns are matched by heading: Name, Mobile, Email, Budget, BHK, Location, Source.{" "}
-            <a className="font-semibold text-accent" download="leads-template.csv" href={`data:text/csv;charset=utf-8,${encodeURIComponent(TEMPLATE)}`}>
+            <a className="font-medium text-accent" download="leads-template.csv" href={`data:text/csv;charset=utf-8,${encodeURIComponent(TEMPLATE)}`}>
               Download a template
             </a>
           </p>
@@ -144,21 +144,21 @@ export function LeadImportClient({ existingPhones }: { existingPhones: string[] 
       )}
 
       {msg && (
-        <p role={msg.kind === "error" ? "alert" : "status"} className={`rounded-xl px-3 py-2 text-sm ${msg.kind === "error" ? "tone-bad" : "tone-good"}`}>
-          {msg.text} {msg.kind === "ok" && <Link href="/leads" className="font-semibold underline">View leads</Link>}
+        <p role={msg.kind === "error" ? "alert" : "status"} className={`rounded-xl px-3 py-2 text-xs ${msg.kind === "error" ? "tone-bad" : "tone-good"}`}>
+          {msg.text} {msg.kind === "ok" && <Link href="/leads" className="font-medium underline">View leads</Link>}
         </p>
       )}
 
       {marked.length > 0 && (
         <>
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-medium">
             {fresh.length} new{marked.length - fresh.length > 0 && `, ${marked.length - fresh.length} already in your leads`}
           </p>
           <ul className="card divide-y divide-line !p-0">
             {marked.slice(0, 30).map((r, i) => (
               <li key={i} className={`flex items-center justify-between gap-3 px-4 py-2.5 ${r.duplicate ? "opacity-60" : ""}`}>
                 <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold">{r.name}</span>
+                  <span className="block truncate text-sm font-medium">{r.name}</span>
                   <span className="muted block truncate">
                     {[r.phone || "No number", r.bhk ? `${r.bhk} BHK` : "", r.budget_max ? `Up to ${formatINR(r.budget_max)}` : "", r.locations].filter(Boolean).join(" · ")}
                   </span>

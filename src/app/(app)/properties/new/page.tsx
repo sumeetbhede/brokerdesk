@@ -9,7 +9,7 @@ export default async function NewListingPage({ searchParams }: { searchParams: P
     <>
       <header className="flex items-center justify-between">
         <h1 className="h1">New property</h1>
-        <Link href="/properties" className="text-sm font-semibold text-muted">Cancel</Link>
+        <Link href="/properties" className="text-sm font-medium text-muted">Cancel</Link>
       </header>
       <Banner error={error} />
       <form action={createListing} className="card space-y-4">

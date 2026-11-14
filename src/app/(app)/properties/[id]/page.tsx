@@ -41,7 +41,7 @@ export default async function ListingPage({
       <>
         <header className="flex items-center justify-between">
           <h1 className="h1">Edit property</h1>
-          <Link href={`/properties/${id}`} className="text-sm font-semibold text-muted">Cancel</Link>
+          <Link href={`/properties/${id}`} className="text-sm font-medium text-muted">Cancel</Link>
         </header>
         <Banner error={error} />
         <form action={updateListing.bind(null, id)} className="card space-y-4">
@@ -71,9 +71,9 @@ export default async function ListingPage({
     <>
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link href="/properties" className="text-sm font-semibold text-muted">‹ Properties</Link>
+          <Link href="/properties" className="text-sm font-medium text-muted">‹ Properties</Link>
           <h1 className="h1">{listing.title}</h1>
-          <p className="text-xl font-bold text-accent">{formatINR(listing.price) || "Price on request"}</p>
+          <p className="text-2xl font-medium text-accent">{formatINR(listing.price) || "Price on request"}</p>
           <p className="muted">{listingSummary(listing)}</p>
         </div>
         <Link href={`/properties/${id}?edit=1`} className="btn-secondary btn-sm">Edit</Link>
@@ -103,7 +103,7 @@ export default async function ListingPage({
       </section>
 
       <section className="card space-y-3">
-        <h2 className="font-bold">Share</h2>
+        <h2 className="text-sm font-medium">Share</h2>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <ShareButton listingId={id} text={shareText}>WhatsApp</ShareButton>
           <ShareButton listingId={id} text={shareText} mode="copy" className="btn-secondary">Copy link</ShareButton>
@@ -123,7 +123,7 @@ export default async function ListingPage({
           <p className="label">Status</p>
           <StatusSelect listingId={id} status={listing.status} />
         </div>
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
           {[
             ["Project", listing.project],
             ["Builder", listing.builder],
@@ -133,22 +133,22 @@ export default async function ListingPage({
             .filter(([, v]) => v)
             .map(([k, v]) => (
               <div key={k}>
-                <dt className="text-xs text-muted">{k}</dt>
+                <dt className="text-[11px] text-muted">{k}</dt>
                 <dd className="font-medium">{v}</dd>
               </div>
             ))}
         </dl>
-        {listing.description && <p className="whitespace-pre-wrap text-sm">{listing.description}</p>}
+        {listing.description && <p className="whitespace-pre-wrap text-xs">{listing.description}</p>}
         {listing.private_notes && (
           <div className="rounded-xl bg-warn-bg p-3">
             <p className="label !text-warn-ink">Private notes</p>
-            <p className="whitespace-pre-wrap text-sm">{listing.private_notes}</p>
+            <p className="whitespace-pre-wrap text-xs">{listing.private_notes}</p>
           </div>
         )}
       </section>
 
       <section className="space-y-2">
-        <h2 className="font-bold">
+        <h2 className="text-sm font-medium">
           Shared {shares.length} time{shares.length === 1 ? "" : "s"}, opened {totalViews}
         </h2>
         {shares.length > 0 && (
@@ -158,7 +158,7 @@ export default async function ListingPage({
               const row = (
                 <>
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold">{s.leads?.name ?? "General link"}</span>
+                    <span className="block truncate text-sm font-medium">{s.leads?.name ?? "General link"}</span>
                     <span className="muted block">Created {formatDate(s.created_at)}</span>
                   </span>
                   {last ? (

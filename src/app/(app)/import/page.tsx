@@ -16,7 +16,7 @@ export default async function QuickImportPage() {
       <LeadImportClient existingPhones={existing} />
       <Link href="/properties/import" className="card flex items-center justify-between">
         <span>
-          <span className="block font-semibold">Import properties instead</span>
+          <span className="block font-medium">Import properties instead</span>
           <span className="muted block">Upload a builder&apos;s inventory sheet</span>
         </span>
         <span className="text-accent" aria-hidden>›</span>

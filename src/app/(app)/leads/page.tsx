@@ -63,7 +63,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             <li key={l.id}>
               <Link href={`/leads/${l.id}`} className="card block">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="truncate font-semibold">{l.name}</p>
+                  <p className="truncate text-sm font-medium">{l.name}</p>
                   <StageChip stage={l.stage} />
                 </div>
                 <p className="muted truncate">

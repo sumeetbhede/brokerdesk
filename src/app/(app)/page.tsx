@@ -60,14 +60,14 @@ export default async function TodayPage() {
       </div>
 
       <section id="followups" className="space-y-2">
-        <h2 className="font-bold">Follow-ups</h2>
+        <h2 className="text-sm font-medium">Follow-ups</h2>
         {due.length === 0 && <p className="card muted">Nothing due. Add a follow-up date on any lead and it shows up here.</p>}
         {due.map((f) => (
           <div key={f.id} className="card space-y-3">
             <Link href={`/leads/${f.lead_id}`} className="block">
-              <p className="font-semibold">{f.leads?.name}</p>
+              <p className="text-sm font-medium">{f.leads?.name}</p>
               <p className="muted">
-                {f.due_on < today && <span className="font-semibold text-danger">Overdue since {formatDate(f.due_on)} · </span>}
+                {f.due_on < today && <span className="font-medium text-danger">Overdue since {formatDate(f.due_on)} · </span>}
                 {f.note || "Follow up"}
               </p>
             </Link>
@@ -83,7 +83,7 @@ export default async function TodayPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="font-bold">Links opened</h2>
+        <h2 className="text-sm font-medium">Links opened</h2>
         {recentViews.length === 0 && <p className="card muted">When a client opens a property you shared, you&apos;ll see it here.</p>}
         {recentViews.length > 0 && (
           <ul className="card divide-y divide-line !p-0">
@@ -94,10 +94,10 @@ export default async function TodayPage() {
                   className="flex items-center justify-between gap-3 px-4 py-3"
                 >
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold">{v.shares?.leads?.name ?? "Someone"} opened</span>
+                    <span className="block truncate text-sm font-medium">{v.shares?.leads?.name ?? "Someone"} opened</span>
                     <span className="muted block truncate">{v.shares?.listings?.title}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-muted">{formatDateTime(v.viewed_at)}</span>
+                  <span className="shrink-0 text-[11px] text-muted">{formatDateTime(v.viewed_at)}</span>
                 </Link>
               </li>
             ))}
@@ -107,12 +107,12 @@ export default async function TodayPage() {
 
       {(newLeads.data?.length ?? 0) > 0 && (
         <section className="space-y-2">
-          <h2 className="font-bold">Hot leads</h2>
+          <h2 className="text-sm font-medium">Hot leads</h2>
           <ul className="card divide-y divide-line !p-0">
             {newLeads.data!.map((l) => (
               <li key={l.id}>
                 <Link href={`/leads/${l.id}`} className="flex items-center justify-between px-4 py-3">
-                  <span className="font-semibold">{l.name}</span>
+                  <span className="text-sm font-medium">{l.name}</span>
                   <StageChip stage="hot" />
                 </Link>
               </li>
@@ -137,8 +137,8 @@ function greeting() {
 function Stat({ label, value, href }: { label: string; value: number; href: string }) {
   return (
     <Link href={href} className="card !p-3">
-      <p className="text-2xl font-bold tabular-nums">{value}</p>
-      <p className="text-xs text-muted">{label}</p>
+      <p className="text-2xl font-medium tabular-nums">{value}</p>
+      <p className="text-[11px] text-muted">{label}</p>
     </Link>
   );
 }

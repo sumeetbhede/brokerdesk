@@ -83,7 +83,7 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
       ) : (
         <div className="flex aspect-[4/3] items-center justify-center bg-subtle text-6xl text-faint">⌂</div>
       )}
-      {photos.length > 1 && <p className="muted px-4 pt-2 text-xs">Swipe for {photos.length} photos</p>}
+      {photos.length > 1 && <p className="muted px-4 pt-2 text-[11px]">Swipe for {photos.length} photos</p>}
 
       <div className="space-y-4 px-4 pt-4">
         <header>
@@ -91,24 +91,24 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
             <span className="chip mb-2 bg-warn-bg text-warn-ink">{listing.status === "sold" ? "Sold" : "On hold"}</span>
           )}
           <h1 className="h1">{listing.title}</h1>
-          <p className="text-2xl font-bold text-accent">{formatINR(listing.price) || "Price on request"}</p>
+          <p className="text-2xl font-medium text-accent">{formatINR(listing.price) || "Price on request"}</p>
         </header>
 
         <dl className="card grid grid-cols-2 gap-x-4 gap-y-3">
           {facts.map(([k, v]) => (
             <div key={k}>
-              <dt className="text-xs text-muted">{k}</dt>
-              <dd className="font-semibold">{v}</dd>
+              <dt className="text-[11px] text-muted">{k}</dt>
+              <dd className="text-sm font-medium">{v}</dd>
             </div>
           ))}
         </dl>
 
-        {listing.description && <p className="card whitespace-pre-wrap text-sm leading-relaxed">{listing.description}</p>}
+        {listing.description && <p className="card whitespace-pre-wrap text-xs leading-relaxed">{listing.description}</p>}
 
         {broker && (
           <div className="card">
-            <p className="text-xs text-muted">Shared by</p>
-            <p className="font-semibold">{broker.name}</p>
+            <p className="text-[11px] text-muted">Shared by</p>
+            <p className="text-sm font-medium">{broker.name}</p>
             {broker.business && broker.business !== broker.name && <p className="muted">{broker.business}</p>}
           </div>
         )}

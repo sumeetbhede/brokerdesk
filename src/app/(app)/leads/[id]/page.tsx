@@ -38,7 +38,7 @@ export default async function LeadPage({
       <>
         <header className="flex items-center justify-between">
           <h1 className="h1">Edit lead</h1>
-          <Link href={`/leads/${id}`} className="text-sm font-semibold text-muted">Cancel</Link>
+          <Link href={`/leads/${id}`} className="text-sm font-medium text-muted">Cancel</Link>
         </header>
         <Banner error={error} />
         <form action={updateLead.bind(null, id)} className="card space-y-4">
@@ -81,7 +81,7 @@ export default async function LeadPage({
     <>
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link href="/leads" className="text-sm font-semibold text-muted">‹ Leads</Link>
+          <Link href="/leads" className="text-sm font-medium text-muted">‹ Leads</Link>
           <h1 className="h1 truncate">{lead.name}</h1>
           <StageChip stage={lead.stage} />
           <p className="muted">{[lead.phone, lead.source].filter(Boolean).join(" · ")}</p>
@@ -103,16 +103,16 @@ export default async function LeadPage({
         </div>
         <div>
           <p className="label">Looking for</p>
-          <p className="text-sm">{requirements.length ? requirements.join(" · ") : "No requirements yet. Tap Edit to add budget, BHK and areas."}</p>
+          <p className="text-xs">{requirements.length ? requirements.join(" · ") : "No requirements yet. Tap Edit to add budget, BHK and areas."}</p>
         </div>
       </section>
 
       <section className="space-y-2">
-        <h2 className="font-bold">Follow-ups</h2>
+        <h2 className="text-sm font-medium">Follow-ups</h2>
         {(followUps.data ?? []).map((f) => (
           <div key={f.id} className="card flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className={`text-sm font-semibold ${f.due_on < today ? "text-danger" : ""}`}>
+              <p className={`text-sm font-medium ${f.due_on < today ? "text-danger" : ""}`}>
                 {f.due_on === today ? "Today" : formatDate(f.due_on)}
                 {f.due_on < today && " (overdue)"}
               </p>
@@ -137,7 +137,7 @@ export default async function LeadPage({
       </section>
 
       <section className="space-y-2">
-        <h2 className="font-bold">Matching properties</h2>
+        <h2 className="text-sm font-medium">Matching properties</h2>
         {matches.length === 0 && (
           <p className="card muted">No available property fits these requirements right now.</p>
         )}
@@ -145,8 +145,8 @@ export default async function LeadPage({
           <div key={l.id} className="card space-y-2">
             <Link href={`/properties/${l.id}`} className="block">
               <div className="flex items-start justify-between gap-2">
-                <p className="font-semibold">{l.title}</p>
-                <p className="shrink-0 font-bold text-accent">{formatINR(l.price)}</p>
+                <p className="text-sm font-medium">{l.title}</p>
+                <p className="shrink-0 text-sm font-medium text-accent">{formatINR(l.price)}</p>
               </div>
               <p className="muted">{listingSummary(l)}</p>
             </Link>
@@ -160,7 +160,7 @@ export default async function LeadPage({
               >
                 Send on WhatsApp
               </ShareButton>
-              {sentIds.has(l.id) && <span className="text-xs font-semibold text-muted">Already sent</span>}
+              {sentIds.has(l.id) && <span className="text-[11px] font-normal text-muted">Already sent</span>}
             </div>
           </div>
         ))}
@@ -168,7 +168,7 @@ export default async function LeadPage({
 
       {sent.length > 0 && (
         <section className="space-y-2">
-          <h2 className="font-bold">Sent to {lead.name.split(" ")[0]}</h2>
+          <h2 className="text-sm font-medium">Sent to {lead.name.split(" ")[0]}</h2>
           <ul className="card divide-y divide-line !p-0">
             {sent.map((s) => {
               const last = s.share_views.map((v) => v.viewed_at).sort().at(-1);
@@ -176,7 +176,7 @@ export default async function LeadPage({
                 <li key={s.id}>
                   <Link href={`/properties/${s.listing_id}`} className="flex items-center justify-between gap-3 px-4 py-3">
                     <span className="min-w-0">
-                      <span className="block truncate text-sm font-semibold">{s.listings?.title}</span>
+                      <span className="block truncate text-sm font-medium">{s.listings?.title}</span>
                       <span className="muted block">Sent {formatDate(s.created_at)}</span>
                     </span>
                     {last ? (
@@ -195,15 +195,15 @@ export default async function LeadPage({
       )}
 
       <section className="space-y-2">
-        <h2 className="font-bold">Notes</h2>
+        <h2 className="text-sm font-medium">Notes</h2>
         <form action={addNote.bind(null, id)} className="flex gap-2">
           <input className="input" name="body" placeholder="Add a note" aria-label="Add a note" required />
           <button className="btn-secondary">Save</button>
         </form>
         {(notes.data ?? []).map((n) => (
           <div key={n.id} className="card">
-            <p className="whitespace-pre-wrap text-sm">{n.body}</p>
-            <p className="mt-1 text-xs text-muted">{formatDateTime(n.created_at)}</p>
+            <p className="whitespace-pre-wrap text-xs">{n.body}</p>
+            <p className="mt-1 text-[11px] text-muted">{formatDateTime(n.created_at)}</p>
           </div>
         ))}
       </section>

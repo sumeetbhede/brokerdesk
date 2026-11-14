@@ -8,7 +8,7 @@ function Field({ label, name, children, hint }: { label: string; name: string; c
     <div>
       <label className="label" htmlFor={name}>{label}</label>
       {children}
-      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      {hint && <p className="mt-1 text-[11px] text-muted">{hint}</p>}
     </div>
   );
 }

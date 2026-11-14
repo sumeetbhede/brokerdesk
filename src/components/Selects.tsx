@@ -10,7 +10,7 @@ export function StageSelect({ leadId, stage }: { leadId: string; stage: string }
   return (
     <select
       aria-label="Lead status"
-      className={`input border-transparent font-semibold status-${value}`}
+      className={`input border-transparent text-sm font-medium status-${value}`}
       value={value}
       disabled={pending}
       onChange={(e) => {
@@ -47,7 +47,7 @@ export function ConfirmButton({
   action,
   message,
   children,
-  className = "text-sm font-semibold text-danger",
+  className = "text-sm font-medium text-danger",
 }: {
   action: () => Promise<void>;
   message: string;

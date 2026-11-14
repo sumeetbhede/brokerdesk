@@ -24,7 +24,7 @@ export function BottomNav() {
               <Link
                 href={t.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-semibold ${active ? "text-accent" : "text-muted"}`}
+                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-medium ${active ? "text-accent" : "text-muted"}`}
               >
                 <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d={t.icon} />
