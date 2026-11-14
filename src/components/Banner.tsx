@@ -1,5 +1,5 @@
 export function Banner({ error, message }: { error?: string; message?: string }) {
-  if (error) return <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>;
-  if (message) return <p role="status" className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{message}</p>;
+  if (error) return <p role="alert" className="rounded-xl bg-bad-bg px-3 py-2 text-sm text-bad-ink">{error}</p>;
+  if (message) return <p role="status" className="rounded-xl bg-good-bg px-3 py-2 text-sm text-good-ink">{message}</p>;
   return null;
 }

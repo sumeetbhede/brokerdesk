@@ -1,9 +1,9 @@
 export const STAGES = [
-  { id: "new", label: "New" },
-  { id: "contacted", label: "Contacted" },
-  { id: "site_visit", label: "Site visit" },
-  { id: "negotiation", label: "Negotiation" },
-  { id: "closed", label: "Closed" },
+  { id: "warm", label: "Warm" },
+  { id: "hot", label: "Hot" },
+  { id: "visited", label: "Visited" },
+  { id: "booked", label: "Booked" },
+  { id: "cold", label: "Cold" },
   { id: "lost", label: "Lost" },
 ] as const;
 export type Stage = (typeof STAGES)[number]["id"];
@@ -17,7 +17,9 @@ export const LISTING_STATUSES = [
 export const statusLabel = (s: string) => LISTING_STATUSES.find((x) => x.id === s)?.label ?? s;
 
 export const PROPERTY_TYPES = ["Apartment", "Villa", "Plot", "Row house", "Office", "Shop"];
-export const LEAD_SOURCES = ["Referral", "Walk-in", "Portal", "Social media", "Hoarding", "Existing client", "Other"];
+export const LEAD_SOURCES = ["Referral", "Walk-in", "MagicBricks", "99acres", "Housing", "NoBroker", "Social media", "Hoarding", "Existing client", "Other"];
+/** Leads still being worked: not yet booked, and not written off. */
+export const ACTIVE_STAGES = ["warm", "hot", "visited"];
 
 export interface Profile {
   id: string;

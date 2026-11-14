@@ -40,8 +40,8 @@ export default async function ListingPage({
     return (
       <>
         <header className="flex items-center justify-between">
-          <h1 className="h1">Edit listing</h1>
-          <Link href={`/listings/${id}`} className="text-sm font-semibold text-stone-500">Cancel</Link>
+          <h1 className="h1">Edit property</h1>
+          <Link href={`/properties/${id}`} className="text-sm font-semibold text-muted">Cancel</Link>
         </header>
         <Banner error={error} />
         <form action={updateListing.bind(null, id)} className="card space-y-4">
@@ -49,8 +49,8 @@ export default async function ListingPage({
           <button className="btn w-full">Save changes</button>
         </form>
         <div className="text-center">
-          <ConfirmButton action={deleteListing.bind(null, id)} message="Delete this listing? Links you've shared for it will stop working.">
-            Delete listing
+          <ConfirmButton action={deleteListing.bind(null, id)} message="Delete this property? Links you've shared for it will stop working.">
+            Delete property
           </ConfirmButton>
         </div>
       </>
@@ -71,21 +71,21 @@ export default async function ListingPage({
     <>
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link href="/listings" className="text-sm font-semibold text-stone-500">‹ Listings</Link>
+          <Link href="/properties" className="text-sm font-semibold text-muted">‹ Properties</Link>
           <h1 className="h1">{listing.title}</h1>
-          <p className="text-xl font-bold text-brand">{formatINR(listing.price) || "Price on request"}</p>
+          <p className="text-xl font-bold text-accent">{formatINR(listing.price) || "Price on request"}</p>
           <p className="muted">{listingSummary(listing)}</p>
         </div>
-        <Link href={`/listings/${id}?edit=1`} className="btn-secondary btn-sm">Edit</Link>
+        <Link href={`/properties/${id}?edit=1`} className="btn-secondary btn-sm">Edit</Link>
       </header>
 
-      {added && <Banner message="Listing saved. Add a few photos before you share it." />}
+      {added && <Banner message="Property saved. Add a few photos before you share it." />}
 
       <section className="space-y-2">
         {photos.length > 0 && (
           <ul className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4">
             {photos.map((p) => (
-              <li key={p.id} className="relative h-48 w-64 shrink-0 snap-start overflow-hidden rounded-2xl bg-stone-100">
+              <li key={p.id} className="relative h-48 w-64 shrink-0 snap-start overflow-hidden rounded-2xl bg-subtle">
                 <Image src={photoUrl(p.path)} alt="" fill sizes="256px" className="object-cover" unoptimized />
                 <ConfirmButton
                   action={deletePhoto.bind(null, p.id, id)}
@@ -114,7 +114,7 @@ export default async function ListingPage({
           />
         </div>
         <p className="muted">
-          Each link is tracked, so you know when it gets opened. To send it to a specific lead, open the lead and use their matching listings.
+          Each link is tracked, so you know when it gets opened. To send it to a specific lead, open the lead and use their matching properties.
         </p>
       </section>
 
@@ -133,15 +133,15 @@ export default async function ListingPage({
             .filter(([, v]) => v)
             .map(([k, v]) => (
               <div key={k}>
-                <dt className="text-xs text-stone-500">{k}</dt>
+                <dt className="text-xs text-muted">{k}</dt>
                 <dd className="font-medium">{v}</dd>
               </div>
             ))}
         </dl>
         {listing.description && <p className="whitespace-pre-wrap text-sm">{listing.description}</p>}
         {listing.private_notes && (
-          <div className="rounded-xl bg-amber-50 p-3">
-            <p className="label !text-amber-700">Private notes</p>
+          <div className="rounded-xl bg-warn-bg p-3">
+            <p className="label !text-warn-ink">Private notes</p>
             <p className="whitespace-pre-wrap text-sm">{listing.private_notes}</p>
           </div>
         )}
@@ -152,7 +152,7 @@ export default async function ListingPage({
           Shared {shares.length} time{shares.length === 1 ? "" : "s"}, opened {totalViews}
         </h2>
         {shares.length > 0 && (
-          <ul className="card divide-y divide-stone-100 !p-0">
+          <ul className="card divide-y divide-line !p-0">
             {shares.map((s) => {
               const last = s.share_views.map((v) => v.viewed_at).sort().at(-1);
               const row = (
@@ -162,11 +162,11 @@ export default async function ListingPage({
                     <span className="muted block">Created {formatDate(s.created_at)}</span>
                   </span>
                   {last ? (
-                    <span className="chip shrink-0 bg-emerald-100 text-emerald-800">
+                    <span className="chip shrink-0 bg-good-bg text-good-ink">
                       Opened {s.share_views.length}× · {formatDateTime(last)}
                     </span>
                   ) : (
-                    <span className="chip shrink-0 bg-stone-100 text-stone-600">Not opened</span>
+                    <span className="chip shrink-0 bg-subtle text-muted">Not opened</span>
                   )}
                 </>
               );

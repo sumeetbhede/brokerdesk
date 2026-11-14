@@ -25,7 +25,7 @@ export function StatusSelect({ listingId, status }: { listingId: string; status:
   const [pending, start] = useTransition();
   return (
     <select
-      aria-label="Listing status"
+      aria-label="Property status"
       className="input"
       defaultValue={status}
       disabled={pending}
@@ -42,7 +42,7 @@ export function ConfirmButton({
   action,
   message,
   children,
-  className = "text-sm font-semibold text-red-600",
+  className = "text-sm font-semibold text-danger",
 }: {
   action: () => Promise<void>;
   message: string;

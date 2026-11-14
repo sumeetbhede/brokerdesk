@@ -26,22 +26,22 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
     if (s) p.set("status", s);
     if (q) p.set("q", q);
     const qs = p.toString();
-    return qs ? `/listings?${qs}` : "/listings";
+    return qs ? `/properties?${qs}` : "/properties";
   };
 
   return (
     <>
       <header className="flex items-center justify-between gap-2">
-        <h1 className="h1">Listings</h1>
+        <h1 className="h1">Properties</h1>
         <div className="flex gap-2">
-          <Link href="/listings/import" className="btn-secondary btn-sm">Import</Link>
-          <Link href="/listings/new" className="btn btn-sm">+ Add</Link>
+          <Link href="/properties/import" className="btn-secondary btn-sm">Import</Link>
+          <Link href="/properties/new" className="btn btn-sm">+ Add</Link>
         </div>
       </header>
 
       <form>
         {status && <input type="hidden" name="status" value={status} />}
-        <input className="input" type="search" name="q" defaultValue={q} placeholder="Search title, area, project or builder" aria-label="Search listings" />
+        <input className="input" type="search" name="q" defaultValue={q} placeholder="Search title, area, project or builder" aria-label="Search properties" />
       </form>
 
       <div className="flex gap-2">
@@ -51,7 +51,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
             <Link
               key={s.id}
               href={filterHref(s.id)}
-              className={`chip border px-3 py-1.5 ${active ? "border-brand bg-brand text-white" : "border-stone-300 bg-white text-stone-700"}`}
+              className={`chip border px-3 py-1.5 ${active ? "border-brand bg-brand text-on-brand" : "border-line bg-card text-ink"}`}
             >
               {s.label}
             </Link>
@@ -60,24 +60,24 @@ export default async function ListingsPage({ searchParams }: { searchParams: Pro
       </div>
 
       {listings.length === 0 ? (
-        <p className="card muted">{q || status ? "No listings match." : "No listings yet. Add one, or import a builder's inventory sheet."}</p>
+        <p className="card muted">{q || status ? "No properties match." : "No properties yet. Add one, or import a builder's inventory sheet."}</p>
       ) : (
         <ul className="space-y-2">
           {listings.map((l) => {
             const cover = [...(l.listing_photos ?? [])].sort((a, b) => a.sort - b.sort)[0];
             return (
               <li key={l.id}>
-                <Link href={`/listings/${l.id}`} className="card flex gap-3 !p-3">
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-stone-100">
+                <Link href={`/properties/${l.id}`} className="card flex gap-3 !p-3">
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-subtle">
                     {cover ? (
                       <Image src={photoUrl(cover.path)} alt="" fill sizes="80px" className="object-cover" unoptimized />
                     ) : (
-                      <span className="flex h-full items-center justify-center text-2xl text-stone-300">⌂</span>
+                      <span className="flex h-full items-center justify-center text-2xl text-faint">⌂</span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{l.title}</p>
-                    <p className="font-bold text-brand">{formatINR(l.price) || "Price on request"}</p>
+                    <p className="font-bold text-accent">{formatINR(l.price) || "Price on request"}</p>
                     <p className="muted truncate">{listingSummary(l)}</p>
                     {l.status !== "available" && <StatusChip status={l.status} />}
                   </div>

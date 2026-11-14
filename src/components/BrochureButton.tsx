@@ -38,12 +38,12 @@ export function BrochureButton({
       // jsPDF's built-in fonts have no rupee glyph
       const price = formatINR(listing.price).replace("₹", "Rs. ");
 
-      doc.setFillColor(15, 118, 110);
+      doc.setFillColor(15, 15, 15);
       doc.rect(0, 0, W, 26, "F");
-      doc.setTextColor(255);
+      doc.setTextColor(194, 161, 78);
       doc.setFont("helvetica", "bold").setFontSize(15);
       doc.text(broker.business || broker.name, M, 12);
-      doc.setFont("helvetica", "normal").setFontSize(10);
+      doc.setFont("helvetica", "normal").setFontSize(10).setTextColor(235);
       doc.text([broker.name, broker.phone].filter(Boolean).join("  |  "), M, 19);
 
       let y = 34;
@@ -73,7 +73,7 @@ export function BrochureButton({
       doc.text(titleLines, M, y + 4);
       y += titleLines.length * 8 + 2;
       if (price) {
-        doc.setFontSize(16).setTextColor(15, 118, 110);
+        doc.setFontSize(16).setTextColor(138, 109, 31);
         doc.text(price, M, y + 4);
         y += 10;
       }
@@ -101,7 +101,7 @@ export function BrochureButton({
 
       doc.setFontSize(10).setTextColor(87, 83, 78);
       doc.text(`Contact ${broker.name}${broker.phone ? " on " + broker.phone : ""}`, M, 287);
-      doc.save(`${listing.title.replace(/[^\w]+/g, "-").slice(0, 50) || "listing"}.pdf`);
+      doc.save(`${listing.title.replace(/[^\w]+/g, "-").slice(0, 50) || "property"}.pdf`);
     } finally {
       setBusy(false);
     }

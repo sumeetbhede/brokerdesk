@@ -62,13 +62,13 @@ export async function updateProfile(fd: FormData) {
     .from("profiles")
     .update({ full_name: str(fd, "full_name"), phone: str(fd, "phone") })
     .eq("id", profile.id);
-  if (error) fail("/more", error.message);
+  if (error) fail("/settings", error.message);
   const business = str(fd, "business_name");
   if (business && profile.role === "owner") {
     await supabase.from("organizations").update({ name: business }).eq("id", profile.org_id);
   }
-  revalidatePath("/more");
-  redirect("/more?message=" + encodeURIComponent("Saved"));
+  revalidatePath("/settings");
+  redirect("/settings?message=" + encodeURIComponent("Saved"));
 }
 
 // ---------- leads ----------
@@ -153,7 +153,41 @@ export async function completeFollowUp(id: string, leadId: string) {
   revalidatePath("/");
 }
 
-// ---------- listings ----------
+export interface LeadImportRow {
+  name: string;
+  phone?: string;
+  email?: string;
+  budget_max?: number | null;
+  bhk?: number | null;
+  locations?: string;
+  source?: string;
+}
+
+export async function importLeads(rows: LeadImportRow[]) {
+  const { supabase } = await requireProfile();
+  const clean = rows
+    .filter((r) => r.name?.trim())
+    .slice(0, 2000)
+    .map((r) => ({
+      name: r.name.trim().slice(0, 120),
+      phone: (r.phone ?? "").trim().slice(0, 30),
+      email: (r.email ?? "").trim().slice(0, 120),
+      budget_min: null,
+      budget_max: r.budget_max ?? null,
+      bhk: r.bhk ?? null,
+      locations: (r.locations ?? "").slice(0, 200),
+      property_type: "",
+      source: (r.source ?? "").slice(0, 60),
+    }));
+  if (clean.length === 0) return { ok: false as const, error: "No rows with a name were found." };
+  const { error } = await supabase.from("leads").insert(clean);
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath("/leads");
+  revalidatePath("/");
+  return { ok: true as const, count: clean.length };
+}
+
+// ---------- properties ----------
 function listingFields(fd: FormData) {
   const status = str(fd, "status");
   return {
@@ -176,29 +210,29 @@ function listingFields(fd: FormData) {
 export async function createListing(fd: FormData) {
   const { supabase } = await requireProfile();
   const fields = listingFields(fd);
-  if (!fields.title) fail("/listings/new", "Title is required");
+  if (!fields.title) fail("/properties/new", "Title is required");
   const { data, error } = await supabase.from("listings").insert(fields).select("id").single();
-  if (error || !data) fail("/listings/new", error?.message ?? "Could not save listing");
-  revalidatePath("/listings");
-  redirect(`/listings/${data!.id}?added=1`);
+  if (error || !data) fail("/properties/new", error?.message ?? "Could not save property");
+  revalidatePath("/properties");
+  redirect(`/properties/${data!.id}?added=1`);
 }
 
 export async function updateListing(id: string, fd: FormData) {
   const { supabase } = await requireProfile();
   const fields = listingFields(fd);
-  if (!fields.title) fail(`/listings/${id}?edit=1`, "Title is required");
+  if (!fields.title) fail(`/properties/${id}?edit=1`, "Title is required");
   const { error } = await supabase.from("listings").update(fields).eq("id", id);
-  if (error) fail(`/listings/${id}?edit=1`, error.message);
-  revalidatePath(`/listings/${id}`);
-  redirect(`/listings/${id}`);
+  if (error) fail(`/properties/${id}?edit=1`, error.message);
+  revalidatePath(`/properties/${id}`);
+  redirect(`/properties/${id}`);
 }
 
 export async function setListingStatus(id: string, status: string) {
   if (!LISTING_STATUSES.some((s) => s.id === status)) return;
   const { supabase } = await requireProfile();
   await supabase.from("listings").update({ status }).eq("id", id);
-  revalidatePath(`/listings/${id}`);
-  revalidatePath("/listings");
+  revalidatePath(`/properties/${id}`);
+  revalidatePath("/properties");
 }
 
 export async function deleteListing(id: string) {
@@ -206,8 +240,8 @@ export async function deleteListing(id: string) {
   const { data: photos } = await supabase.from("listing_photos").select("path").eq("listing_id", id);
   if (photos?.length) await supabase.storage.from("listing-photos").remove(photos.map((p) => p.path));
   await supabase.from("listings").delete().eq("id", id);
-  revalidatePath("/listings");
-  redirect("/listings");
+  revalidatePath("/properties");
+  redirect("/properties");
 }
 
 export async function deletePhoto(photoId: string, listingId: string) {
@@ -215,7 +249,7 @@ export async function deletePhoto(photoId: string, listingId: string) {
   const { data } = await supabase.from("listing_photos").select("path").eq("id", photoId).single();
   if (data) await supabase.storage.from("listing-photos").remove([data.path]);
   await supabase.from("listing_photos").delete().eq("id", photoId);
-  revalidatePath(`/listings/${listingId}`);
+  revalidatePath(`/properties/${listingId}`);
 }
 
 export interface ImportRow {
@@ -255,7 +289,7 @@ export async function importListings(rows: ImportRow[]) {
   if (clean.length === 0) return { ok: false as const, error: "No rows with a title were found." };
   const { error } = await supabase.from("listings").insert(clean);
   if (error) return { ok: false as const, error: error.message };
-  revalidatePath("/listings");
+  revalidatePath("/properties");
   return { ok: true as const, count: clean.length };
 }
 
@@ -265,7 +299,7 @@ export async function createShare(listingId: string, leadId: string | null) {
   const token = randomBytes(9).toString("base64url");
   const { error } = await supabase.from("shares").insert({ listing_id: listingId, lead_id: leadId, token });
   if (error) return { ok: false as const, error: error.message };
-  revalidatePath(`/listings/${listingId}`);
+  revalidatePath(`/properties/${listingId}`);
   if (leadId) revalidatePath(`/leads/${leadId}`);
   return { ok: true as const, token };
 }

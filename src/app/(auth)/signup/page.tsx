@@ -18,7 +18,7 @@ export default async function SignupPage({
       <div>
         <label className="label" htmlFor="phone">WhatsApp number</label>
         <input className="input" id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="98765 43210" required />
-        <p className="muted mt-1 text-xs">Clients see this on the listings you share.</p>
+        <p className="muted mt-1 text-xs">Clients see this on the properties you share.</p>
       </div>
       <div>
         <label className="label" htmlFor="business_name">Business name (optional)</label>
@@ -34,7 +34,7 @@ export default async function SignupPage({
       </div>
       <button className="btn">Create account</button>
       <p className="muted text-center">
-        Already have an account? <Link href="/login" className="font-semibold text-brand">Log in</Link>
+        Already have an account? <Link href="/login" className="font-semibold text-accent">Log in</Link>
       </p>
     </form>
   );

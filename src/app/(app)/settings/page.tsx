@@ -7,8 +7,8 @@ export default async function MorePage({ searchParams }: { searchParams: Promise
   const { profile, user } = await requireProfile();
   return (
     <>
-      <h1 className="h1">Your details</h1>
-      <p className="muted">Clients see your name, number and business name on shared listings and brochures.</p>
+      <h1 className="h1">Settings</h1>
+      <p className="muted">Clients see your name, number and business name on shared properties and brochures.</p>
       <Banner {...sp} />
       <form action={updateProfile} className="card space-y-4">
         <div>

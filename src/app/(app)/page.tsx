@@ -2,6 +2,7 @@ import Link from "next/link";
 import { completeFollowUp } from "@/app/actions";
 import { formatDate, formatDateTime, todayIST, waNumber } from "@/lib/format";
 import { requireProfile } from "@/lib/supabase/server";
+import { ACTIVE_STAGES } from "@/lib/types";
 
 interface FollowUpRow {
   id: string;
@@ -28,14 +29,14 @@ export default async function TodayPage() {
       .lte("due_on", today)
       .order("due_on")
       .limit(50),
-    supabase.from("leads").select("id, name, phone, created_at").eq("stage", "new").order("created_at", { ascending: false }).limit(5),
+    supabase.from("leads").select("id, name, phone, created_at").eq("stage", "hot").order("updated_at", { ascending: false }).limit(5),
     supabase
       .from("share_views")
       .select("id, viewed_at, shares(listing_id, listings(title), leads(id, name))")
       .order("viewed_at", { ascending: false })
       .limit(8),
     Promise.all([
-      supabase.from("leads").select("id", { count: "exact", head: true }).not("stage", "in", "(closed,lost)"),
+      supabase.from("leads").select("id", { count: "exact", head: true }).in("stage", ACTIVE_STAGES),
       supabase.from("listings").select("id", { count: "exact", head: true }).eq("status", "available"),
     ]),
   ]);
@@ -48,56 +49,54 @@ export default async function TodayPage() {
     <>
       <header>
         <p className="muted">{formatDate(today)}</p>
-        <h1 className="h1">{firstName ? `Hi ${firstName}` : "Today"}</h1>
+        <h1 className="h1">{greeting()}{firstName ? `, ${firstName}` : ""}</h1>
       </header>
 
       <div className="grid grid-cols-3 gap-3">
         <Stat label="Follow-ups due" value={due.length} href="#followups" />
         <Stat label="Active leads" value={counts[0].count ?? 0} href="/leads" />
-        <Stat label="Available units" value={counts[1].count ?? 0} href="/listings" />
+        <Stat label="Available units" value={counts[1].count ?? 0} href="/properties" />
       </div>
 
       <section id="followups" className="space-y-2">
         <h2 className="font-bold">Follow-ups</h2>
         {due.length === 0 && <p className="card muted">Nothing due. Add a follow-up date on any lead and it shows up here.</p>}
         {due.map((f) => (
-          <div key={f.id} className="card flex items-center gap-3">
-            <Link href={`/leads/${f.lead_id}`} className="min-w-0 flex-1">
-              <p className="truncate font-semibold">{f.leads?.name}</p>
-              <p className="muted truncate">
-                {f.due_on < today && <span className="font-semibold text-red-600">Overdue since {formatDate(f.due_on)} · </span>}
+          <div key={f.id} className="card space-y-3">
+            <Link href={`/leads/${f.lead_id}`} className="block">
+              <p className="font-semibold">{f.leads?.name}</p>
+              <p className="muted">
+                {f.due_on < today && <span className="font-semibold text-danger">Overdue since {formatDate(f.due_on)} · </span>}
                 {f.note || "Follow up"}
               </p>
             </Link>
-            {f.leads?.phone && (
-              <a href={`tel:${f.leads.phone}`} className="btn-secondary btn-sm" aria-label={`Call ${f.leads.name}`}>Call</a>
-            )}
-            {f.leads?.phone && (
-              <a href={`https://wa.me/${waNumber(f.leads.phone)}`} className="btn-secondary btn-sm" aria-label={`WhatsApp ${f.leads.name}`}>WA</a>
-            )}
-            <form action={completeFollowUp.bind(null, f.id, f.lead_id)}>
-              <button className="btn btn-sm">Done</button>
-            </form>
+            <div className="flex gap-2">
+              {f.leads?.phone && <a href={`tel:${f.leads.phone}`} className="btn-secondary btn-sm flex-1">Call</a>}
+              {f.leads?.phone && <a href={`https://wa.me/${waNumber(f.leads.phone)}`} className="btn-secondary btn-sm flex-1">WhatsApp</a>}
+              <form action={completeFollowUp.bind(null, f.id, f.lead_id)} className="flex-1">
+                <button className="btn btn-sm w-full">Done</button>
+              </form>
+            </div>
           </div>
         ))}
       </section>
 
       <section className="space-y-2">
         <h2 className="font-bold">Links opened</h2>
-        {recentViews.length === 0 && <p className="card muted">When a client opens a listing you shared, you&apos;ll see it here.</p>}
+        {recentViews.length === 0 && <p className="card muted">When a client opens a property you shared, you&apos;ll see it here.</p>}
         {recentViews.length > 0 && (
-          <ul className="card divide-y divide-stone-100 !p-0">
+          <ul className="card divide-y divide-line !p-0">
             {recentViews.map((v) => (
               <li key={v.id}>
                 <Link
-                  href={v.shares?.leads ? `/leads/${v.shares.leads.id}` : `/listings/${v.shares?.listing_id}`}
+                  href={v.shares?.leads ? `/leads/${v.shares.leads.id}` : `/properties/${v.shares?.listing_id}`}
                   className="flex items-center justify-between gap-3 px-4 py-3"
                 >
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-semibold">{v.shares?.leads?.name ?? "Someone"} opened</span>
                     <span className="muted block truncate">{v.shares?.listings?.title}</span>
                   </span>
-                  <span className="shrink-0 text-xs text-stone-500">{formatDateTime(v.viewed_at)}</span>
+                  <span className="shrink-0 text-xs text-muted">{formatDateTime(v.viewed_at)}</span>
                 </Link>
               </li>
             ))}
@@ -107,13 +106,13 @@ export default async function TodayPage() {
 
       {(newLeads.data?.length ?? 0) > 0 && (
         <section className="space-y-2">
-          <h2 className="font-bold">New leads to contact</h2>
-          <ul className="card divide-y divide-stone-100 !p-0">
+          <h2 className="font-bold">Hot leads</h2>
+          <ul className="card divide-y divide-line !p-0">
             {newLeads.data!.map((l) => (
               <li key={l.id}>
                 <Link href={`/leads/${l.id}`} className="flex items-center justify-between px-4 py-3">
                   <span className="font-semibold">{l.name}</span>
-                  <span className="text-xs text-stone-500">Added {formatDate(l.created_at)}</span>
+                  <span className="chip tone-bad">Hot</span>
                 </Link>
               </li>
             ))}
@@ -123,17 +122,22 @@ export default async function TodayPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/leads/new" className="btn">+ Add lead</Link>
-        <Link href="/listings/new" className="btn-secondary">+ Add listing</Link>
+        <Link href="/properties/new" className="btn-secondary">+ Add property</Link>
       </div>
     </>
   );
+}
+
+function greeting() {
+  const hour = Number(new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", hour12: false }).format(new Date()));
+  return hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 }
 
 function Stat({ label, value, href }: { label: string; value: number; href: string }) {
   return (
     <Link href={href} className="card !p-3">
       <p className="text-2xl font-bold tabular-nums">{value}</p>
-      <p className="text-xs text-stone-500">{label}</p>
+      <p className="text-xs text-muted">{label}</p>
     </Link>
   );
 }

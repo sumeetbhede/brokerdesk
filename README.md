@@ -1,4 +1,4 @@
-# BrokerDesk
+# EstatePal
 
 Mobile-first web app for independent real estate brokers: leads, listings, and tracked WhatsApp sharing.
 Next.js 16 (App Router) + Supabase (Postgres, Auth, Storage).
@@ -19,8 +19,8 @@ to your deployed address.
 |---|---|---|
 | Today | `/` | Follow-ups due, links clients opened, new leads |
 | Leads | `/leads` | Stages, notes, follow-ups, matching listings, send on WhatsApp |
-| Listings | `/listings` | Manual entry, photos, status, PDF brochure |
-| Import | `/listings/import` | Excel/CSV inventory sheet, columns matched by heading |
+| Properties | `/properties` | Manual entry, photos, status, PDF brochure |
+| Import | `/properties/import` | Excel/CSV inventory sheet, columns matched by heading |
 | Public link | `/p/<token>` | What the client sees; each open is logged |
 
 ## Data model

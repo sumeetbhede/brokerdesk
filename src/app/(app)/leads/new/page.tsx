@@ -9,7 +9,7 @@ export default async function NewLeadPage({ searchParams }: { searchParams: Prom
     <>
       <header className="flex items-center justify-between">
         <h1 className="h1">New lead</h1>
-        <Link href="/leads" className="text-sm font-semibold text-stone-500">Cancel</Link>
+        <Link href="/leads" className="text-sm font-semibold text-muted">Cancel</Link>
       </header>
       <Banner error={error} />
       <form action={createLead} className="card space-y-4">

@@ -1,24 +1,97 @@
 @import "tailwindcss";
 
+/* EstatePal palette: matte black, grey, white and muted gold. Follows the phone's light/dark setting. */
+:root {
+  color-scheme: light dark;
+  --bg: #f5f4f1;
+  --card: #ffffff;
+  --subtle: #edebe6;
+  --line: #dedbd3;
+  --ink: #141414;
+  --muted: #66635d;
+  --faint: #a8a49b;
+  --brand: #b8963e;
+  --brand-dark: #a38433;
+  --on-brand: #141414;
+  --accent: #7a5f14;
+  --danger: #b93a2c;
+  --good-bg: #e2f1e8;
+  --good-ink: #1f5c3d;
+  --warn-bg: #f6ecd2;
+  --warn-ink: #6e5210;
+  --bad-bg: #fbe6e3;
+  --bad-ink: #8f2a1f;
+  --info-bg: #e1ebf6;
+  --info-ink: #1f4c7d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f0f;
+    --card: #1a1a1a;
+    --subtle: #262626;
+    --line: #303030;
+    --ink: #f2f0eb;
+    --muted: #a6a39c;
+    --faint: #6e6b65;
+    --brand: #c2a14e;
+    --brand-dark: #ad8e3f;
+    --on-brand: #141414;
+    --accent: #d2b466;
+    --danger: #f0736a;
+    --good-bg: #173426;
+    --good-ink: #8fd3ab;
+    --warn-bg: #3a2f12;
+    --warn-ink: #e6c878;
+    --bad-bg: #3d1b17;
+    --bad-ink: #f2a59d;
+    --info-bg: #182b40;
+    --info-ink: #9cc3ec;
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
-  --color-brand: #0f766e;
-  --color-brand-dark: #115e59;
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-good-bg: var(--good-bg);
+  --color-good-ink: var(--good-ink);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-ink: var(--warn-ink);
+  --color-bad-bg: var(--bad-bg);
+  --color-bad-ink: var(--bad-ink);
+  --color-info-bg: var(--info-bg);
+  --color-info-ink: var(--info-ink);
 }
 
 body {
-  background: #f5f5f4;
-  color: #1c1917;
+  background: var(--bg);
+  color: var(--ink);
 }
 
 @layer components {
-  .card { @apply rounded-2xl border border-stone-200 bg-white p-4; }
-  .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-white active:bg-brand-dark disabled:opacity-50; }
-  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-stone-300 bg-white px-4 text-sm font-semibold text-stone-800 active:bg-stone-100 disabled:opacity-50; }
+  .card { @apply rounded-2xl border border-line bg-card p-4; }
+  .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-on-brand active:bg-brand-dark disabled:opacity-50; }
+  .btn-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-card px-4 text-sm font-semibold text-ink active:bg-subtle disabled:opacity-50; }
   .btn-sm { @apply min-h-9 rounded-lg px-3 text-xs; }
-  .input { @apply block min-h-11 w-full rounded-xl border border-stone-300 bg-white px-3 text-base text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20; }
-  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-stone-500; }
+  .input { @apply block min-h-11 w-full rounded-xl border border-line bg-card px-3 text-base text-ink placeholder:text-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25; }
+  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-muted; }
   .chip { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold; }
   .h1 { @apply text-2xl font-bold tracking-tight; }
-  .muted { @apply text-sm text-stone-500; }
+  .muted { @apply text-sm text-muted; }
+  .tone-good { @apply bg-good-bg text-good-ink; }
+  .tone-warn { @apply bg-warn-bg text-warn-ink; }
+  .tone-bad { @apply bg-bad-bg text-bad-ink; }
+  .tone-info { @apply bg-info-bg text-info-ink; }
+  .tone-neutral { @apply bg-subtle text-muted; }
 }

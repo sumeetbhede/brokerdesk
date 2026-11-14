@@ -42,7 +42,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
             <Link
               key={s.id}
               href={filterHref(s.id)}
-              className={`chip shrink-0 border px-3 py-1.5 ${active ? "border-brand bg-brand text-white" : "border-stone-300 bg-white text-stone-700"}`}
+              className={`chip shrink-0 border px-3 py-1.5 ${active ? "border-brand bg-brand text-on-brand" : "border-line bg-card text-ink"}`}
             >
               {s.label}
             </Link>

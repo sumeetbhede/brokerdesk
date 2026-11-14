@@ -37,7 +37,7 @@ export default async function LeadPage({
       <>
         <header className="flex items-center justify-between">
           <h1 className="h1">Edit lead</h1>
-          <Link href={`/leads/${id}`} className="text-sm font-semibold text-stone-500">Cancel</Link>
+          <Link href={`/leads/${id}`} className="text-sm font-semibold text-muted">Cancel</Link>
         </header>
         <Banner error={error} />
         <form action={updateLead.bind(null, id)} className="card space-y-4">
@@ -80,7 +80,7 @@ export default async function LeadPage({
     <>
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Link href="/leads" className="text-sm font-semibold text-stone-500">‹ Leads</Link>
+          <Link href="/leads" className="text-sm font-semibold text-muted">‹ Leads</Link>
           <h1 className="h1 truncate">{lead.name}</h1>
           <p className="muted">{[lead.phone, lead.source].filter(Boolean).join(" · ")}</p>
         </div>
@@ -110,7 +110,7 @@ export default async function LeadPage({
         {(followUps.data ?? []).map((f) => (
           <div key={f.id} className="card flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className={`text-sm font-semibold ${f.due_on < today ? "text-red-600" : ""}`}>
+              <p className={`text-sm font-semibold ${f.due_on < today ? "text-danger" : ""}`}>
                 {f.due_on === today ? "Today" : formatDate(f.due_on)}
                 {f.due_on < today && " (overdue)"}
               </p>
@@ -135,16 +135,16 @@ export default async function LeadPage({
       </section>
 
       <section className="space-y-2">
-        <h2 className="font-bold">Matching listings</h2>
+        <h2 className="font-bold">Matching properties</h2>
         {matches.length === 0 && (
-          <p className="card muted">No available listing fits these requirements right now.</p>
+          <p className="card muted">No available property fits these requirements right now.</p>
         )}
         {matches.map((l) => (
           <div key={l.id} className="card space-y-2">
-            <Link href={`/listings/${l.id}`} className="block">
+            <Link href={`/properties/${l.id}`} className="block">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-semibold">{l.title}</p>
-                <p className="shrink-0 font-bold text-brand">{formatINR(l.price)}</p>
+                <p className="shrink-0 font-bold text-accent">{formatINR(l.price)}</p>
               </div>
               <p className="muted">{listingSummary(l)}</p>
             </Link>
@@ -158,7 +158,7 @@ export default async function LeadPage({
               >
                 Send on WhatsApp
               </ShareButton>
-              {sentIds.has(l.id) && <span className="text-xs font-semibold text-stone-500">Already sent</span>}
+              {sentIds.has(l.id) && <span className="text-xs font-semibold text-muted">Already sent</span>}
             </div>
           </div>
         ))}
@@ -167,22 +167,22 @@ export default async function LeadPage({
       {sent.length > 0 && (
         <section className="space-y-2">
           <h2 className="font-bold">Sent to {lead.name.split(" ")[0]}</h2>
-          <ul className="card divide-y divide-stone-100 !p-0">
+          <ul className="card divide-y divide-line !p-0">
             {sent.map((s) => {
               const last = s.share_views.map((v) => v.viewed_at).sort().at(-1);
               return (
                 <li key={s.id}>
-                  <Link href={`/listings/${s.listing_id}`} className="flex items-center justify-between gap-3 px-4 py-3">
+                  <Link href={`/properties/${s.listing_id}`} className="flex items-center justify-between gap-3 px-4 py-3">
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-semibold">{s.listings?.title}</span>
                       <span className="muted block">Sent {formatDate(s.created_at)}</span>
                     </span>
                     {last ? (
-                      <span className="chip shrink-0 bg-emerald-100 text-emerald-800">
+                      <span className="chip shrink-0 bg-good-bg text-good-ink">
                         Opened {s.share_views.length}× · {formatDateTime(last)}
                       </span>
                     ) : (
-                      <span className="chip shrink-0 bg-stone-100 text-stone-600">Not opened</span>
+                      <span className="chip shrink-0 bg-subtle text-muted">Not opened</span>
                     )}
                   </Link>
                 </li>
@@ -201,7 +201,7 @@ export default async function LeadPage({
         {(notes.data ?? []).map((n) => (
           <div key={n.id} className="card">
             <p className="whitespace-pre-wrap text-sm">{n.body}</p>
-            <p className="mt-1 text-xs text-stone-500">{formatDateTime(n.created_at)}</p>
+            <p className="mt-1 text-xs text-muted">{formatDateTime(n.created_at)}</p>
           </div>
         ))}
       </section>

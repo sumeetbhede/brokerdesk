@@ -21,7 +21,7 @@ export default async function LoginPage({
       </div>
       <button className="btn">Log in</button>
       <p className="muted text-center">
-        New here? <Link href="/signup" className="font-semibold text-brand">Create an account</Link>
+        New here? <Link href="/signup" className="font-semibold text-accent">Create an account</Link>
       </p>
     </form>
   );

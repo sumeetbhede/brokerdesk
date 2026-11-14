@@ -38,7 +38,7 @@ const load = cache(async (token: string, log: boolean, ua: string): Promise<Shar
 export async function generateMetadata({ params }: { params: Promise<{ token: string }> }): Promise<Metadata> {
   const { token } = await params;
   const data = await load(token, false, "");
-  if (!data) return { title: "Listing not found" };
+  if (!data) return { title: "Property not found" };
   const { listing, photos } = data;
   const title = [listing.title, formatINR(listing.price)].filter(Boolean).join(" · ");
   const description = listingSummary(listing);
@@ -72,7 +72,7 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
   return (
     <main className="mx-auto max-w-xl pb-28">
       {photos.length > 0 ? (
-        <ul className="flex snap-x snap-mandatory overflow-x-auto bg-stone-200">
+        <ul className="flex snap-x snap-mandatory overflow-x-auto bg-subtle">
           {photos.map((p, i) => (
             <li key={p} className="aspect-[4/3] w-full shrink-0 snap-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,23 +81,23 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
           ))}
         </ul>
       ) : (
-        <div className="flex aspect-[4/3] items-center justify-center bg-stone-200 text-6xl text-stone-400">⌂</div>
+        <div className="flex aspect-[4/3] items-center justify-center bg-subtle text-6xl text-faint">⌂</div>
       )}
       {photos.length > 1 && <p className="muted px-4 pt-2 text-xs">Swipe for {photos.length} photos</p>}
 
       <div className="space-y-4 px-4 pt-4">
         <header>
           {listing.status !== "available" && (
-            <span className="chip mb-2 bg-amber-100 text-amber-800">{listing.status === "sold" ? "Sold" : "On hold"}</span>
+            <span className="chip mb-2 bg-warn-bg text-warn-ink">{listing.status === "sold" ? "Sold" : "On hold"}</span>
           )}
           <h1 className="h1">{listing.title}</h1>
-          <p className="text-2xl font-bold text-brand">{formatINR(listing.price) || "Price on request"}</p>
+          <p className="text-2xl font-bold text-accent">{formatINR(listing.price) || "Price on request"}</p>
         </header>
 
         <dl className="card grid grid-cols-2 gap-x-4 gap-y-3">
           {facts.map(([k, v]) => (
             <div key={k}>
-              <dt className="text-xs text-stone-500">{k}</dt>
+              <dt className="text-xs text-muted">{k}</dt>
               <dd className="font-semibold">{v}</dd>
             </div>
           ))}
@@ -107,7 +107,7 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
 
         {broker && (
           <div className="card">
-            <p className="text-xs text-stone-500">Shared by</p>
+            <p className="text-xs text-muted">Shared by</p>
             <p className="font-semibold">{broker.name}</p>
             {broker.business && broker.business !== broker.name && <p className="muted">{broker.business}</p>}
           </div>
@@ -115,7 +115,7 @@ export default async function SharedListingPage({ params }: { params: Promise<{ 
       </div>
 
       {broker?.phone && (
-        <div className="fixed inset-x-0 bottom-0 border-t border-stone-200 bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="fixed inset-x-0 bottom-0 border-t border-line bg-card p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <div className="mx-auto grid max-w-xl grid-cols-2 gap-3">
             <a href={`tel:${broker.phone}`} className="btn-secondary">Call {broker.name.split(" ")[0]}</a>
             {wa && <a href={wa} className="btn">WhatsApp</a>}
