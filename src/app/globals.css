@@ -23,6 +23,13 @@
   --bad-ink: #8f2a1f;
   --info-bg: #e1ebf6;
   --info-ink: #1f4c7d;
+  /* lead statuses: pale tint behind, darker text of the same colour */
+  --hot-bg: #fbeae6;     --hot-ink: #9a3b2a;
+  --warm-bg: #f7f1e4;    --warm-ink: #7d6230;
+  --visited-bg: #e8eef6; --visited-ink: #2f4f7a;
+  --booked-bg: #e6f2ec;  --booked-ink: #2f6b4f;
+  --cold-bg: #eef0f2;    --cold-ink: #55606b;
+  --lost-bg: #f1f1ef;    --lost-ink: #666666;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,6 +54,12 @@
     --bad-ink: #f2a59d;
     --info-bg: #182b40;
     --info-ink: #9cc3ec;
+    --hot-bg: #3a1e18;     --hot-ink: #f0a08e;
+    --warm-bg: #2a2416;    --warm-ink: #d9bf8c;
+    --visited-bg: #1b2533; --visited-ink: #9db8de;
+    --booked-bg: #17291f;  --booked-ink: #8ccba6;
+    --cold-bg: #1f2328;    --cold-ink: #a9b4bf;
+    --lost-bg: #222222;    --lost-ink: #9a9a9a;
   }
 }
 
@@ -94,4 +107,19 @@ body {
   .tone-bad { @apply bg-bad-bg text-bad-ink; }
   .tone-info { @apply bg-info-bg text-info-ink; }
   .tone-neutral { @apply bg-subtle text-muted; }
+
+  /* Lead status pill: fully rounded, small text, no border. */
+  .status-pill { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold leading-4; }
+  .status-hot { background: var(--hot-bg); color: var(--hot-ink); }
+  .bar-hot { background: var(--hot-ink); }
+  .status-warm { background: var(--warm-bg); color: var(--warm-ink); }
+  .bar-warm { background: var(--warm-ink); }
+  .status-visited { background: var(--visited-bg); color: var(--visited-ink); }
+  .bar-visited { background: var(--visited-ink); }
+  .status-booked { background: var(--booked-bg); color: var(--booked-ink); }
+  .bar-booked { background: var(--booked-ink); }
+  .status-cold { background: var(--cold-bg); color: var(--cold-ink); }
+  .bar-cold { background: var(--cold-ink); }
+  .status-lost { background: var(--lost-bg); color: var(--lost-ink); }
+  .bar-lost { background: var(--lost-ink); }
 }

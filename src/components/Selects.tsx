@@ -1,18 +1,23 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { setLeadStage, setListingStatus } from "@/app/actions";
 import { LISTING_STATUSES, STAGES } from "@/lib/types";
 
 export function StageSelect({ leadId, stage }: { leadId: string; stage: string }) {
   const [pending, start] = useTransition();
+  const [value, setValue] = useState(stage);
   return (
     <select
-      aria-label="Lead stage"
-      className="input"
-      defaultValue={stage}
+      aria-label="Lead status"
+      className={`input border-transparent font-semibold status-${value}`}
+      value={value}
       disabled={pending}
-      onChange={(e) => start(() => setLeadStage(leadId, e.target.value))}
+      onChange={(e) => {
+        const next = e.target.value;
+        setValue(next);
+        start(() => setLeadStage(leadId, next));
+      }}
     >
       {STAGES.map((s) => (
         <option key={s.id} value={s.id}>{s.label}</option>

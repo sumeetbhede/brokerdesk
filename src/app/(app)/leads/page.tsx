@@ -35,14 +35,19 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
         <input className="input" type="search" name="q" defaultValue={q} placeholder="Search name, phone or area" aria-label="Search leads" />
       </form>
 
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1">
         {[{ id: "", label: "All" }, ...STAGES].map((s) => {
           const active = (stage ?? "") === s.id;
           return (
             <Link
               key={s.id}
               href={filterHref(s.id)}
-              className={`chip shrink-0 border px-3 py-1.5 ${active ? "border-brand bg-brand text-on-brand" : "border-line bg-card text-ink"}`}
+              aria-current={active ? "true" : undefined}
+              className={
+                s.id
+                  ? `status-pill status-${s.id} shrink-0 px-3 py-1.5 ${active ? "ring-2 ring-current" : "opacity-80"}`
+                  : `status-pill shrink-0 px-3 py-1.5 ${active ? "bg-brand text-on-brand" : "bg-subtle text-muted"}`
+              }
             >
               {s.label}
             </Link>

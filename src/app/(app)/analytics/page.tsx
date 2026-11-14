@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { requireProfile } from "@/lib/supabase/server";
-import { ACTIVE_STAGES } from "@/lib/types";
+import { ACTIVE_STAGES, STAGES } from "@/lib/types";
+
+/** label, value, bar colour class */
+type Row = [string, number, string];
 
 const RANGES = [
   { id: "week", label: "This week", days: 7 },
@@ -22,16 +25,17 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
   const total = leads.length;
   const booked = count(["booked"]);
   // A booked lead was hot and visited on the way, so each step counts everyone who got at least that far.
-  const funnel = [
-    { label: "All leads", value: total },
-    { label: "Hot", value: count(["hot", "visited", "booked"]) },
-    { label: "Visited", value: count(["visited", "booked"]) },
-    { label: "Booked", value: booked },
+  const funnel: Row[] = [
+    ["All leads", total, "bg-brand"],
+    ["Hot", count(["hot", "visited", "booked"]), "bar-hot"],
+    ["Visited", count(["visited", "booked"]), "bar-visited"],
+    ["Booked", booked, "bar-booked"],
   ];
+  const byStatus: Row[] = STAGES.map((st) => [st.label, count([st.id]), `bar-${st.id}`]);
   const bySource = (stages: string[]) => {
     const m = new Map<string, number>();
     for (const l of leads) if (stages.includes(l.stage)) m.set(l.source || "Not set", (m.get(l.source || "Not set") ?? 0) + 1);
-    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+    return [...m.entries()].sort((a, b) => b[1] - a[1]).map(([label, value]): Row => [label, value, "bg-brand"]);
   };
   const activeBySource = bySource(ACTIVE_STAGES);
   const bookedBySource = bySource(["booked"]);
@@ -59,14 +63,19 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <>
           <div className="grid grid-cols-3 gap-3">
             <Tile label="Total leads" value={String(total)} />
-            <Tile label="Hot right now" value={String(count(["hot"]))} />
+            <Tile label="Hot right now" value={String(count(["hot"]))} tone="status-hot" />
             <Tile label="Conversion" value={`${rate}%`} />
           </div>
 
           <section className="card space-y-3">
             <h2 className="font-bold">Conversion funnel</h2>
-            <Bars rows={funnel.map((f) => [f.label, f.value] as [string, number])} max={total} showShare />
+            <Bars rows={funnel} max={total} showShare />
             <p className="muted">{booked} of {total} leads booked. Cold and lost leads count only in the first bar.</p>
+          </section>
+
+          <section className="card space-y-3">
+            <h2 className="font-bold">Leads by status</h2>
+            <Bars rows={byStatus} max={total} />
           </section>
 
           <section className="card space-y-3">
@@ -88,20 +97,20 @@ function daysAgo(days: number) {
   return new Date(Date.now() - days * 864e5).toISOString();
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
+function Tile({ label, value, tone }: { label: string; value: string; tone?: string }) {
   return (
-    <div className="card !p-3">
+    <div className={`card !p-3 ${tone ? `${tone} border-transparent` : ""}`}>
       <p className="text-2xl font-bold tabular-nums">{value}</p>
-      <p className="text-xs text-muted">{label}</p>
+      <p className={`text-xs ${tone ? "" : "text-muted"}`}>{label}</p>
     </div>
   );
 }
 
-function Bars({ rows, max, showShare = false }: { rows: [string, number][]; max?: number; showShare?: boolean }) {
+function Bars({ rows, max, showShare = false }: { rows: Row[]; max?: number; showShare?: boolean }) {
   const top = max ?? Math.max(...rows.map((r) => r[1]), 1);
   return (
     <ul className="space-y-2.5">
-      {rows.map(([label, value]) => (
+      {rows.map(([label, value, color]) => (
         <li key={label}>
           <div className="mb-1 flex items-baseline justify-between text-sm">
             <span>{label}</span>
@@ -111,7 +120,7 @@ function Bars({ rows, max, showShare = false }: { rows: [string, number][]; max?
             </span>
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-subtle">
-            <div className="h-full rounded-full bg-brand" style={{ width: `${top ? Math.max((value / top) * 100, value ? 2 : 0) : 0}%` }} />
+            <div className={`h-full rounded-full ${color}`} style={{ width: `${top ? Math.max((value / top) * 100, value ? 2 : 0) : 0}%` }} />
           </div>
         </li>
       ))}

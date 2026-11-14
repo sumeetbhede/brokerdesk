@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { addFollowUp, addNote, completeFollowUp, deleteLead, updateLead } from "@/app/actions";
 import { Banner } from "@/components/Banner";
 import { LeadFields } from "@/components/Forms";
+import { StageChip } from "@/components/Chips";
 import { ConfirmButton, StageSelect } from "@/components/Selects";
 import { ShareButton } from "@/components/ShareButton";
 import { budgetText, formatDate, formatDateTime, formatINR, listingSummary, matchListings, todayIST, waNumber } from "@/lib/format";
@@ -82,6 +83,7 @@ export default async function LeadPage({
         <div className="min-w-0">
           <Link href="/leads" className="text-sm font-semibold text-muted">‹ Leads</Link>
           <h1 className="h1 truncate">{lead.name}</h1>
+          <StageChip stage={lead.stage} />
           <p className="muted">{[lead.phone, lead.source].filter(Boolean).join(" · ")}</p>
         </div>
         <Link href={`/leads/${id}?edit=1`} className="btn-secondary btn-sm">Edit</Link>
@@ -96,7 +98,7 @@ export default async function LeadPage({
 
       <section className="card space-y-3">
         <div>
-          <p className="label">Stage</p>
+          <p className="label">Status</p>
           <StageSelect leadId={id} stage={lead.stage} />
         </div>
         <div>

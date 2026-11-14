@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { completeFollowUp } from "@/app/actions";
+import { StageChip } from "@/components/Chips";
 import { formatDate, formatDateTime, todayIST, waNumber } from "@/lib/format";
 import { requireProfile } from "@/lib/supabase/server";
 import { ACTIVE_STAGES } from "@/lib/types";
@@ -112,7 +113,7 @@ export default async function TodayPage() {
               <li key={l.id}>
                 <Link href={`/leads/${l.id}`} className="flex items-center justify-between px-4 py-3">
                   <span className="font-semibold">{l.name}</span>
-                  <span className="chip tone-bad">Hot</span>
+                  <StageChip stage="hot" />
                 </Link>
               </li>
             ))}
